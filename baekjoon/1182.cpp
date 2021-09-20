@@ -1,58 +1,25 @@
 #include <bits/stdc++.h>
 using namespace std;
-vector<int> v;
-int N, M, S;
-int arr[21];
-bool visited[21] = {0, };
-int result = 0;
-void dfs(int cnt){
-	if(cnt==M){
-		int sum = 0;
-		for(int i= 0; i<M; ++i){
-			sum += arr[i];
-		}
-		if(sum ==S){
-			result++;
-		}
-		return;
-	}
-	for(int i = 1; i<=N; ++i){
-
-		if(!visited[i]){
-			for(int j= 1; j<=i; ++j){
-				visited[j] = true;
-			}
-			arr[cnt] = v[i];
-
-			dfs(cnt+1);
-
-			for(int j = i+1; j<=N; ++j){
-				visited[j] = false;
-			}
-		}
-	}
+int N, S, result = 0;
+int arr[20];
+void subset(int index, int sum){
+	sum += arr[index];
+	if(index>=N) return;
+	if(sum==S) result++;
+	subset(index+1, sum);
+	subset(index+1, sum-arr[index]);
 }
 int main(){
 	ios::sync_with_stdio(0);
 	cin.tie(0);
 	cout.tie(0);
-	
 	cin>>N>>S;
-	v.emplace_back(0);
-	for(int i = 1; i<=N; ++i){
+	for(int i= 0; i<N; ++i){
 		int x;
 		cin>>x;
-		v.emplace_back(x);
+		arr[i]= x;
 	}
-	for(int i = 1; i<=N; ++i){
-		M = i;
-		if(M>N){
-			break;
-		}
-		for(int j = 1; j<=N; ++j){
-			visited[j]= false;
-		}
-		dfs(0);
-	}
+	subset(0, 0);
+	
 	cout<<result<<"\n";
 }
